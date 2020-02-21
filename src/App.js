@@ -9,6 +9,7 @@ import {connect, Provider} from "react-redux";
 import uuid from "uuid";
 import moment from "moment";
 import USERS from "./users.json";
+import COMMANDS from "./commands.json";
 
 const reducer = combineReducers({
   activeThreadId: activeThreadIdReducer,
@@ -167,52 +168,63 @@ const ThreadTabs = connect(
   mapDispatchToTabsProps
 )(Tabs);
 
-const TextFieldSubmit = (props) => {
-  let input;
+class TextFieldSubmit extends Component {
+  state = {
+    text:""
+  }
+  onSubmit = () => {
+    if(this.state.text !== "") {
+      this.setState({text:""});
+      this.props.onSubmit(this.state.text);
+    }
+  }
+  render() {
+    return (
+      <div className='ui input'>
+        <input
+          type='text'
+          value={this.state.text}
+          onKeyUp={(e) => e.which===13 && this.onSubmit() /*console.log(e.which)*/}
+          list={this.state.text.startsWith("/") ? "commands" : ""}
+          onChange={(e)=>this.setState({text:e.target.value})}
+        >
+        </input>
+        <datalist id="commands">
+          {COMMANDS.map(({id,cmd})=><option value={`/${cmd}`}/>)}
+        </datalist>
+        <button
+          onClick={this.onSubmit}
+          className='ui primary button'
+          type='submit'
+          disabled={!(this.state.text.length>0)}
+        >
+          Submit
+        </button>
+      </div>
+    );
+  }
+}
 
+function renderMessage(message, index) {
+  const sender = USERS.find(({id})=>id===message.sender);
   return (
-    <div className='ui input'>
-      <input
-        ref={node => input = node}
-        type='text'
-      >
-      </input>
-      <button
-        onClick={() => {
-          props.onSubmit(input.value);
-          input.value = '';
-        }}
-        className='ui primary button'
-        type='submit'
-      >
-        Submit
-      </button>
+    <div
+      className='comment'
+      key={index}
+      onClick={() => props.onClick(message.id)}
+    >
+      <a className="avatar"><img src={sender.avatar}/></a>
+      <div className="content">
+        <a className="author">{sender.title}</a>
+        <div className="metadata"><span className="date">{moment(message.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</span></div>
+        <div className="text"><p>{message.text}</p></div>
+      </div>
     </div>
   );
-};
-
+}
 const MessageList = (props) => (
   <div className='ui comments' style={{textAlign:"left"}}>
-    {
-      props.messages.map((m, index) => {
-        const sender = USERS.find(({id})=>id===m.sender);
-        return (
-          <div
-            className='comment'
-            key={index}
-            onClick={() => props.onClick(m.id)}
-          >
-            <a className="avatar"><img src={sender.avatar}/></a>
-            <div className="content">
-              <a className="author">{sender.title}</a>
-              <div className="metadata"><span className="date">{moment(m.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</span></div>
-              <div className="text"><p>{m.text}</p></div>
-            </div>
-          </div>
-        );
-      })
-
-    }
+    {props.messages.map(renderMessage)}
   </div>
 );
 
