@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/dtws/entrance-problem-1/static/css/main.d1b05096.chunk.css",
-    "main.js": "/dtws/entrance-problem-1/static/js/main.96d2d577.chunk.js",
-    "main.js.map": "/dtws/entrance-problem-1/static/js/main.96d2d577.chunk.js.map",
-    "runtime-main.js": "/dtws/entrance-problem-1/static/js/runtime-main.f53b4cb6.js",
-    "runtime-main.js.map": "/dtws/entrance-problem-1/static/js/runtime-main.f53b4cb6.js.map",
-    "static/js/2.efe21686.chunk.js": "/dtws/entrance-problem-1/static/js/2.efe21686.chunk.js",
-    "static/js/2.efe21686.chunk.js.map": "/dtws/entrance-problem-1/static/js/2.efe21686.chunk.js.map",
-    "index.html": "/dtws/entrance-problem-1/index.html",
-    "precache-manifest.28bafde63b8470fd7ee4807afde1ecb8.js": "/dtws/entrance-problem-1/precache-manifest.28bafde63b8470fd7ee4807afde1ecb8.js",
-    "service-worker.js": "/dtws/entrance-problem-1/service-worker.js",
-    "static/css/main.d1b05096.chunk.css.map": "/dtws/entrance-problem-1/static/css/main.d1b05096.chunk.css.map",
-    "static/js/2.efe21686.chunk.js.LICENSE.txt": "/dtws/entrance-problem-1/static/js/2.efe21686.chunk.js.LICENSE.txt",
-    "static/media/logo.svg": "/dtws/entrance-problem-1/static/media/logo.5d5d9eef.svg"
+    "main.css": "/entrance-problem-1/static/css/main.d1b05096.chunk.css",
+    "main.js": "/entrance-problem-1/static/js/main.bb8475ff.chunk.js",
+    "main.js.map": "/entrance-problem-1/static/js/main.bb8475ff.chunk.js.map",
+    "runtime-main.js": "/entrance-problem-1/static/js/runtime-main.c41bc855.js",
+    "runtime-main.js.map": "/entrance-problem-1/static/js/runtime-main.c41bc855.js.map",
+    "static/js/2.efe21686.chunk.js": "/entrance-problem-1/static/js/2.efe21686.chunk.js",
+    "static/js/2.efe21686.chunk.js.map": "/entrance-problem-1/static/js/2.efe21686.chunk.js.map",
+    "index.html": "/entrance-problem-1/index.html",
+    "precache-manifest.ba72c00fbb7018628c1d3357b74333a0.js": "/entrance-problem-1/precache-manifest.ba72c00fbb7018628c1d3357b74333a0.js",
+    "service-worker.js": "/entrance-problem-1/service-worker.js",
+    "static/css/main.d1b05096.chunk.css.map": "/entrance-problem-1/static/css/main.d1b05096.chunk.css.map",
+    "static/js/2.efe21686.chunk.js.LICENSE.txt": "/entrance-problem-1/static/js/2.efe21686.chunk.js.LICENSE.txt",
+    "static/media/logo.svg": "/entrance-problem-1/static/media/logo.5d5d9eef.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.f53b4cb6.js",
+    "static/js/runtime-main.c41bc855.js",
     "static/js/2.efe21686.chunk.js",
     "static/css/main.d1b05096.chunk.css",
-    "static/js/main.96d2d577.chunk.js"
+    "static/js/main.bb8475ff.chunk.js"
   ]
 }
