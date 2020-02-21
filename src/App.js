@@ -1,18 +1,21 @@
 /* eslint-disable no-undef */ /* eslint-disable no-shadow */ /* eslint-disable react/prefer-stateless-function */ /* eslint-disable default-case */ /* eslint-disable consistent-return */ /* eslint-disable no-return-assign */ /* eslint-disable no-unused-vars */ /* eslint-disable react/jsx-no-undef */ // eslint-disable-line max-len
-import React from 'react';
+import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import "./style.css";
+import 'semantic-ui-css/semantic.min.css';
 import { createStore, combineReducers } from "redux";
 import {connect, Provider} from "react-redux";
 import uuid from "uuid";
+import moment from "moment";
+import USERS from "./users.json";
 
 const reducer = combineReducers({
   activeThreadId: activeThreadIdReducer,
   threads: threadsReducer,
 });
 
-function activeThreadIdReducer(state = '1-fca2', action) {
+function activeThreadIdReducer(state = USERS[0].id, action) {
   if (action.type === 'OPEN_THREAD') {
     return action.id;
   } else {
@@ -37,18 +40,7 @@ function findThreadIndex(threads, action) {
   }
 }
 
-function threadsReducer(state = [
-  {
-    id: '1-fca2',
-    title: 'Buzz Aldrin',
-    messages: messagesReducer(undefined, {}),
-  },
-  {
-    id: '2-be91',
-    title: 'Michael Collins',
-    messages: messagesReducer(undefined, {}),
-  },
-], action) {
+function threadsReducer(state = USERS.map(o=>{return {...o,messages:messagesReducer(undefined,{})}}), action) {
   switch (action.type) {
     case 'ADD_MESSAGE':
     case 'DELETE_MESSAGE': {
@@ -79,6 +71,7 @@ function messagesReducer(state = [], action) {
     case 'ADD_MESSAGE': {
       const newMessage = {
         text: action.text,
+        sender: action.sender,
         timestamp: Date.now(),
         id: uuid.v4(),
       };
@@ -108,11 +101,12 @@ function deleteMessage(id) {
   };
 }
 
-function addMessage(text, threadId) {
+function addMessage(text, sender, receiver) {
   return {
     type: 'ADD_MESSAGE',
-    text: text,
-    threadId: threadId,
+    text,
+    sender,
+    threadId: receiver,
   };
 }
 
@@ -198,35 +192,57 @@ const TextFieldSubmit = (props) => {
 };
 
 const MessageList = (props) => (
-  <div className='ui comments'>
+  <div className='ui comments' style={{textAlign:"left"}}>
     {
-      props.messages.map((m, index) => (
-        <div
-          className='comment'
-          key={index}
-          onClick={() => props.onClick(m.id)}
-        >
-          <div className='text'>
-            {m.text}
-            <span className='metadata'>@{m.timestamp}</span>
+      props.messages.map((m, index) => {
+        const sender = USERS.find(({id})=>id===m.sender);
+        return (
+          <div
+            className='comment'
+            key={index}
+            onClick={() => props.onClick(m.id)}
+          >
+            <a className="avatar"><img src={sender.avatar}/></a>
+            <div className="content">
+              <a className="author">{sender.title}</a>
+              <div className="metadata"><span className="date">{moment(m.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</span></div>
+              <div className="text"><p>{m.text}</p></div>
+            </div>
           </div>
-        </div>
-      ))
+        );
+      })
+
     }
   </div>
 );
 
-const Thread = (props) => (
-  <div className='ui center aligned basic segment'>
-    <MessageList
-      messages={props.thread.messages}
-      onClick={props.onMessageClick}
-    />
-    <TextFieldSubmit
-      onSubmit={props.onMessageSubmit}
-    />
-  </div>
+const ReceiverList = ({selectedItem, items, onSelect}) => (
+  <select value={selectedItem} onChange={onSelect}>
+    {items.map(({val,key}) => (<option value={key} key={key}>{val}</option>))}
+  </select>
 );
+
+class Thread extends Component {
+  state = {receiver:USERS[0].id};
+  render() {
+    return (
+      <div className='ui center aligned basic segment'>
+        <MessageList
+          messages={this.props.thread.messages}
+          onClick={this.props.onMessageClick}
+        />
+        <TextFieldSubmit
+          onSubmit={(t)=>this.props.onMessageSubmit(t,this.state.receiver)}
+        />
+        <ReceiverList
+          selectedItem={this.state.receiver}
+          items={USERS.map(({id,title})=>({key:id,val:title}))}
+          onSelect={(e)=>this.setState({receiver:e.target.value})}
+        />
+      </div>
+    );
+  }
+}
 
 const mapStateToThreadProps = (state) => (
   {
@@ -249,9 +265,9 @@ const mergeThreadProps = (stateProps, dispatchProps) => (
   {
     ...stateProps,
     ...dispatchProps,
-    onMessageSubmit: (text) => (
+    onMessageSubmit: (text,receiver) => (
       dispatchProps.dispatch(
-        addMessage(text, stateProps.thread.id)
+        addMessage(text ,stateProps.thread.id, receiver)
       )
     ),
   }
