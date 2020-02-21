@@ -263,10 +263,4 @@ const ThreadDisplay = connect(
   mergeThreadProps
 )(Thread);
 
-//ReactDOM.render(
-//  <ReactRedux.Provider store={store}>
-//    <App />
-//  </ReactRedux.Provider>,
-//  document.getElementById('content')
-//);
 export default App;
