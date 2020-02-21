@@ -218,7 +218,7 @@ function renderMessage(message, index) {
         <a className="author">{sender.title}</a>
         <div className="metadata"><span className="date">{moment(message.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</span></div>
         {
-          message.text==="/img" ? (<div><img src="https://picsum.photos/200/300"/></div>) : (<div className="text"><p>{message.text}</p></div>)
+          message.text===`/${COMMANDS[0].cmd}` ? (<div><img src={`https://picsum.photos/id/${index}/200/300`}/></div>) : (<div className="text"><p>{message.text}</p></div>)
         }
       </div>
     </div>
